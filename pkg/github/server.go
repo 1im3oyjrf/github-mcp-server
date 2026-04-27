@@ -11,6 +11,12 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// serverName is the name reported by the MCP server.
+const serverName = "github-mcp-server"
+
+// serverVersion is the current version of this server.
+const serverVersion = "0.1.0"
+
 // NewServer creates a new MCP server configured with GitHub tools.
 // It accepts a GitHub personal access token used to authenticate API requests.
 func NewServer(token string, opts ...server.ServerOption) (*server.MCPServer, error) {
@@ -22,8 +28,8 @@ func NewServer(token string, opts ...server.ServerOption) (*server.MCPServer, er
 
 	// Initialize the MCP server with GitHub-specific metadata
 	s := server.NewMCPServer(
-		"github-mcp-server",
-		"0.1.0",
+		serverName,
+		serverVersion,
 		opts...,
 	)
 
