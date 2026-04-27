@@ -47,8 +47,9 @@ and more through the MCP protocol over stdio.`,
 	}
 
 	cmd.Flags().StringVar(&token, "token", "", "GitHub personal access token (overrides GITHUB_TOKEN env var)")
-	// Default log file to ~/github-mcp-server.log for easier local debugging.
-	cmd.Flags().StringVar(&logFile, "log-file", os.Getenv("HOME")+"/github-mcp-server.log", "Path to log file")
+	// Default log file to the current working directory for portability across systems.
+	// Using $HOME can be surprising when running in containers or non-standard environments.
+	cmd.Flags().StringVar(&logFile, "log-file", "github-mcp-server.log", "Path to log file")
 	cmd.Flags().BoolVar(&readOnly, "read-only", false, "Restrict server to read-only operations")
 
 	cmd.AddCommand(stdioCmd(&token, &logFile, &readOnly))
