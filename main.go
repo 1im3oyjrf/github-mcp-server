@@ -51,7 +51,9 @@ and more through the MCP protocol over stdio.`,
 	// The previous default of "github-mcp-server.log" would silently create log files in the
 	// working directory, which was cluttering my project directories.
 	cmd.Flags().StringVar(&logFile, "log-file", "", "Path to log file (default: no log file)")
-	cmd.Flags().BoolVar(&readOnly, "read-only", false, "Restrict server to read-only operations")
+	// Defaulting read-only to true for my personal use — I mostly use this for querying
+	// and don't want to accidentally trigger write operations.
+	cmd.Flags().BoolVar(&readOnly, "read-only", true, "Restrict server to read-only operations")
 
 	cmd.AddCommand(stdioCmd(&token, &logFile, &readOnly))
 
@@ -95,11 +97,4 @@ func runServer(ctx context.Context, token, logFile string, readOnly bool) error 
 		return fmt.Errorf("failed to create server: %w", err)
 	}
 
-	fmt.Fprintf(os.Stderr, "GitHub MCP Server %s starting (read-only: %v)\n", Version, readOnly)
-
-	if err := s.ServeStdio(ctx); err != nil {
-		return fmt.Errorf("server error: %w", err)
-	}
-
-	return nil
-}
+	fmt.Fprintf(os.Stderr, "GitHub MCP Server %s starting (read-only: %v)\n",
