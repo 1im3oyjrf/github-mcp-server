@@ -44,6 +44,7 @@ func NewServer(token string, opts ...server.ServerOption) (*server.MCPServer, er
 // newGitHubClient creates an authenticated GitHub API client using the provided token.
 // Note: token validation here only checks for empty string; invalid tokens will
 // fail at request time with a 401 from the GitHub API.
+// Tokens should be fine-grained personal access tokens with the minimum required scopes.
 func newGitHubClient(token string) (*github.Client, error) {
 	if token == "" {
 		return nil, fmt.Errorf("GitHub token must not be empty")
@@ -59,6 +60,7 @@ func newGitHubClient(token string) (*github.Client, error) {
 }
 
 // registerToolsets registers all available GitHub toolsets with the MCP server.
+// TODO: consider making this configurable so individual toolsets can be toggled on/off.
 func registerToolsets(s *server.MCPServer, client *github.Client) error {
 	sets := []toolsets.Toolset{
 		toolsets.NewRepositoryToolset(client),
