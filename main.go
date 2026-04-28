@@ -92,8 +92,6 @@ func runServer(ctx context.Context, token, logFile string, readOnly bool) error 
 		Version:  Version,
 	}
 
-	// Print startup info to stderr so it doesn't interfere with MCP stdio communication.
-	fmt.Fprintf(os.Stderr, "Starting github-mcp-server %s (read-only: %v)\n", Version, readOnly)
+	// Print startup info to stderr so it doesn't interfere with MCP protocol messages on stdout.
+	fmt.Fprintf(os.Stderr, "Starting GitHub MCP Server %s (read-only: %v)\n", Version, readOnly)
 
-	s, err := server.New(cfg)
-	if e
